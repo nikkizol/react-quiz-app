@@ -40,24 +40,29 @@ function App() {
     },
   ];
   const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [showScore, setShowScore] = useState(false);
+  const [score, setScore] = useState(0);
 
-  const handleAnswerButtonClick = (answerOption) => {
+  const handleAnswerButtonClick = (isCorrect) => {
+    if (isCorrect) {
+      setScore(score + 1);
+    }
     const nextQuestion = currentQuestion + 1;
     if (nextQuestion < questions.length) {
       setCurrentQuestion(nextQuestion);
     } else {
-      alert("you reached the end of the quiz");
+      setShowScore(true);
     }
   };
 
   return (
     <div className="app">
-      {false ? (
+      {showScore ? (
         <div className="score-section">
-          You scored 1 out of {questions.length}
+          You scored {score} out of {questions.length}
         </div>
       ) : (
-        <>
+        <div>
           <div className="question-section">
             <div className="question-count">
               <span>Question {currentQuestion + 1}</span>/{questions.length}
@@ -68,12 +73,12 @@ function App() {
           </div>
           <div className="answer-section">
             {questions[currentQuestion].answerOptions.map((answer) => (
-              <button onClick={() => handleAnswerButtonClick()}>
+              <button onClick={() => handleAnswerButtonClick(answer.isCorrect)}>
                 {answer.answerText}
               </button>
             ))}
           </div>
-        </>
+        </div>
       )}
     </div>
   );
